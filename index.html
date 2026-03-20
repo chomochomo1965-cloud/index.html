@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>電卓</title>
+<title>スマホ用横書き履歴電卓</title>
 <style>
 body {
   font-family: sans-serif;
@@ -148,7 +148,7 @@ body {
 
 <!-- タイトル＋電卓本体まとめ -->
 <div id="calculatorWrapper">
-  <h2>電卓</h2>
+  <h2>スマホ用横書き履歴電卓</h2>
   <div id="calculator">
     <button id="closeCalculatorBtn" onclick="closeCalculator()">✖</button>
     <input type="text" id="display" readonly>
@@ -257,17 +257,25 @@ function keyboardHandler(e) {
     clearDisplay();
   }
 }
-
-// 初期化時にキーボードイベント登録
 document.addEventListener('keydown', keyboardHandler);
 
-// 本体＋タイトル閉じる（完全終了）
+// 完全終了（画面全体を削除）
 function closeCalculator() {
-  document.getElementById('calculatorWrapper').style.display = 'none'; // タイトルも消える
+  // 電卓＋タイトルを削除
+  const wrapper = document.getElementById('calculatorWrapper');
+  if(wrapper) wrapper.remove();
+
+  // モーダルも削除
+  const modal = document.getElementById('modal');
+  if(modal) modal.remove();
+
+  // 入力・キーボードリセット
   expression = '';
-  document.getElementById('display').value = '';
-  closeModal();
   document.removeEventListener('keydown', keyboardHandler);
+
+  // 背景も消す
+  document.body.style.background = '';
+  document.body.innerHTML = '';
 }
 
 // 履歴リスト更新
