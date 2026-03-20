@@ -3,13 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>スマホ用横書き履歴電卓（完全終了版）</title>
+<title>電卓</title>
 <style>
 body {
   font-family: sans-serif;
   text-align: center;
   margin-top: 50px;
   background: #f0f0f0;
+}
+
+/* タイトル＋電卓全体をまとめる */
+#calculatorWrapper {
+  display: inline-block;
+  position: relative;
 }
 
 /* 電卓本体 */
@@ -20,6 +26,7 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  margin-top: 10px;
 }
 
 /* 本体閉じるボタン（完全終了用） */
@@ -139,43 +146,43 @@ body {
 </head>
 <body>
 
-<h2>スマホ用横書き履歴電卓（完全終了版）</h2>
+<!-- タイトル＋電卓本体まとめ -->
+<div id="calculatorWrapper">
+  <h2>電卓</h2>
+  <div id="calculator">
+    <button id="closeCalculatorBtn" onclick="closeCalculator()">✖</button>
+    <input type="text" id="display" readonly>
 
-<!-- 電卓本体 -->
-<div id="calculator">
-  <button id="closeCalculatorBtn" onclick="closeCalculator()">✖</button>
+    <div>
+      <button class="btn" onclick="press('7')">7</button>
+      <button class="btn" onclick="press('8')">8</button>
+      <button class="btn" onclick="press('9')">9</button>
+      <button class="btn" onclick="press('/')">÷</button>
+    </div>
+    <div>
+      <button class="btn" onclick="press('4')">4</button>
+      <button class="btn" onclick="press('5')">5</button>
+      <button class="btn" onclick="press('6')">6</button>
+      <button class="btn" onclick="press('*')">×</button>
+    </div>
+    <div>
+      <button class="btn" onclick="press('1')">1</button>
+      <button class="btn" onclick="press('2')">2</button>
+      <button class="btn" onclick="press('3')">3</button>
+      <button class="btn" onclick="press('-')">−</button>
+    </div>
+    <div>
+      <button class="btn" onclick="press('0')">0</button>
+      <button class="btn" onclick="press('.')">.</button>
+      <button class="btn" onclick="calculate()">=</button>
+      <button class="btn" onclick="press('+')">+</button>
+    </div>
+    <div>
+      <button class="btn" onclick="clearDisplay()">C</button>
+    </div>
 
-  <input type="text" id="display" readonly>
-
-  <div>
-    <button class="btn" onclick="press('7')">7</button>
-    <button class="btn" onclick="press('8')">8</button>
-    <button class="btn" onclick="press('9')">9</button>
-    <button class="btn" onclick="press('/')">÷</button>
+    <button id="historyBtn" class="btn" onclick="openModal()">履歴</button>
   </div>
-  <div>
-    <button class="btn" onclick="press('4')">4</button>
-    <button class="btn" onclick="press('5')">5</button>
-    <button class="btn" onclick="press('6')">6</button>
-    <button class="btn" onclick="press('*')">×</button>
-  </div>
-  <div>
-    <button class="btn" onclick="press('1')">1</button>
-    <button class="btn" onclick="press('2')">2</button>
-    <button class="btn" onclick="press('3')">3</button>
-    <button class="btn" onclick="press('-')">−</button>
-  </div>
-  <div>
-    <button class="btn" onclick="press('0')">0</button>
-    <button class="btn" onclick="press('.')">.</button>
-    <button class="btn" onclick="calculate()">=</button>
-    <button class="btn" onclick="press('+')">+</button>
-  </div>
-  <div>
-    <button class="btn" onclick="clearDisplay()">C</button>
-  </div>
-
-  <button id="historyBtn" class="btn" onclick="openModal()">履歴</button>
 </div>
 
 <!-- 履歴モーダル -->
@@ -254,9 +261,9 @@ function keyboardHandler(e) {
 // 初期化時にキーボードイベント登録
 document.addEventListener('keydown', keyboardHandler);
 
-// 本体閉じる（完全終了）
+// 本体＋タイトル閉じる（完全終了）
 function closeCalculator() {
-  document.getElementById('calculator').style.display = 'none';
+  document.getElementById('calculatorWrapper').style.display = 'none'; // タイトルも消える
   expression = '';
   document.getElementById('display').value = '';
   closeModal();
