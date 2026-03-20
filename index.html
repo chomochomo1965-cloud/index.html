@@ -3,20 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>拡張シンプル電卓</title>
+<title>スマホ用横書き履歴電卓</title>
 <style>
-  body { font-family: sans-serif; text-align: center; margin-top: 50px; background: #f0f0f0; }
-  #display { width: 220px; height: 50px; font-size: 28px; text-align: right; margin-bottom: 10px; padding: 5px; border-radius: 5px; border: 1px solid #ccc; }
-  .btn { width: 50px; height: 50px; font-size: 20px; margin: 3px; cursor: pointer; border-radius: 5px; border: none; background: #fff; transition: 0.2s; }
-  .btn:hover { background: #d4d4d4; }
-  #history { margin-top: 20px; max-width: 220px; margin-left: auto; margin-right: auto; text-align: left; }
-  #history div { font-size: 14px; border-bottom: 1px solid #ccc; padding: 2px; }
+body { font-family: sans-serif; text-align: center; margin-top: 50px; background: #f0f0f0; }
+#display { width: 90%; max-width: 300px; height: 60px; font-size: 30px; text-align: right; margin-bottom: 10px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; background: #fff; }
+.btn { width: 70px; height: 70px; font-size: 28px; margin: 5px; cursor: pointer; border-radius: 10px; border: none; background: #fff; transition: 0.2s; }
+.btn:hover { background: #d4d4d4; }
+
+/* 履歴ボタン 横書き固定、大きめ */
+#historyBtn {
+  margin-top: 15px;
+  width: 150px;
+  height: 50px;
+  font-size: 20px;
+  writing-mode: horizontal-tb; 
+  text-align: center;
+  white-space: nowrap;
+  background: #4CAF50;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* モーダル */
+#modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+#modalContent { background: #fff; padding: 20px; border-radius: 10px; max-width: 90%; width: 300px; max-height: 80%; overflow-y: auto; text-align: left; font-size: 18px; }
+
+/* 履歴アイテム 横書き、大きめ */
+.historyItem {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 5px 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.historyItem:hover { background: #e0e0e0; }
+.closeBtn { margin-top: 10px; background: #f44336; color: #fff; border: none; padding: 10px 15px; border-radius: 10px; cursor: pointer; font-size: 18px; }
 </style>
 </head>
 <body>
 
-<h2>拡張電卓</h2>
+<h2>スマホ用横書き履歴電卓</h2>
 <input type="text" id="display" readonly>
+
 <div>
   <button class="btn" onclick="press('7')">7</button>
   <button class="btn" onclick="press('8')">8</button>
@@ -45,11 +80,21 @@
   <button class="btn" onclick="clearDisplay()">C</button>
 </div>
 
-<div id="history"></div>
+<button id="historyBtn" class="btn" onclick="openModal()">履歴</button>
+
+<!-- モーダル -->
+<div id="modal">
+  <div id="modalContent">
+    <h3>履歴</h3>
+    <div id="historyList"></div>
+    <button class="closeBtn" onclick="closeModal()">閉じる</button>
+  </div>
+</div>
 
 <script>
 let expression = '';
 
+// 電卓操作
 function press(value) {
   expression += value;
   document.getElementById('display').value = expression;
@@ -61,7 +106,7 @@ function calculate() {
     addHistory(expression + " = " + result);
     expression = result.toString();
     document.getElementById('display').value = expression;
-  } catch (e) {
+  } catch(e) {
     document.getElementById('display').value = 'Error';
     expression = '';
   }
@@ -72,11 +117,66 @@ function clearDisplay() {
   document.getElementById('display').value = '';
 }
 
+// 履歴管理（localStorage使用）
 function addHistory(text) {
-  const history = document.getElementById('history');
-  const div = document.createElement('div');
-  div.textContent = text;
-  history.prepend(div);
+  const now = new Date();
+  const weekdays = ['日','月','火','水','木','金','土'];
+  const y = now.getFullYear();
+  const m = now.getMonth() + 1;
+  const d = now.getDate();
+  const w = weekdays[now.getDay()];
+  const dateStr = `${y}/${m}/${d} (${w})`;
+  const entry = `[${dateStr}] ${text}`;
+
+  let history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
+  history.unshift(entry); // 最新を上に
+  localStorage.setItem('calcHistory', JSON.stringify(history));
+
+  updateHistoryList();
+}
+
+// モーダル
+function openModal() {
+  document.getElementById('modal').style.display = 'flex';
+  updateHistoryList();
+}
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+// 履歴リスト更新
+function updateHistoryList() {
+  const historyList = document.getElementById('historyList');
+  historyList.innerHTML = '';
+  const history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
+
+  history.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'historyItem';
+    div.textContent = item;
+
+    // クリックで再利用
+    div.addEventListener('click', () => {
+      const formula = item.split(' = ')[0].split('] ')[1];
+      expression = formula;
+      document.getElementById('display').value = expression;
+      closeModal();
+    });
+
+    // 削除ボタン
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '×';
+    delBtn.style.marginLeft = '5px';
+    delBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      history.splice(index, 1);
+      localStorage.setItem('calcHistory', JSON.stringify(history));
+      updateHistoryList();
+    });
+
+    div.appendChild(delBtn);
+    historyList.appendChild(div);
+  });
 }
 
 // キーボード対応
