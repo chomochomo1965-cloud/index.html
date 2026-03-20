@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>履歴電卓</title>
+<title>スマホ用横書き履歴電卓</title>
 <style>
   body {
     font-family: sans-serif;
@@ -37,7 +37,6 @@
   .btn:hover {
     background: #d4d4d4;
   }
-  /* 履歴ボタン 横書き固定、大きめ */
   #historyBtn {
     margin-top: 15px;
     width: 150px;
@@ -53,7 +52,6 @@
     border-radius: 10px;
     cursor: pointer;
   }
-  /* モーダル */
   #modal {
     display: none;
     position: fixed;
@@ -102,7 +100,7 @@
 </style>
 </head>
 <body>
-<h2>履歴電卓</h2>
+<h2>スマホ用横書き履歴電卓</h2>
 <input type="text" id="display" readonly>
 <div>
   <button class="btn" onclick="press('7')">7</button>
@@ -175,8 +173,8 @@ function addHistory(text) {
   const m = now.getMonth() + 1;
   const d = now.getDate();
   const w = weekdays[now.getDay()];
-  const dateStr = `${m}/${d} (${w})`;
-  const entry = `[${dateStr}] ${text}`;
+  const dateStr = `${m}/${d} (${w})`; // 年なし
+  const entry = `${dateStr} ${text}`;
   let history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
   history.unshift(entry);
   localStorage.setItem('calcHistory', JSON.stringify(history));
@@ -201,7 +199,7 @@ function updateHistoryList() {
     div.className = 'historyItem';
     div.textContent = item;
     div.addEventListener('click', () => {
-      const formula = item.split(' = ')[0].split('] ')[1];
+      const formula = item.split(' = ')[0].replace(/^.+\s/, '');
       expression = formula;
       document.getElementById('display').value = expression;
       closeModal();
