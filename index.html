@@ -11,6 +11,38 @@ body {
   margin-top: 50px;
   background: #f0f0f0;
 }
+
+/* 電卓本体 */
+#calculator {
+  position: relative; /* 本体内で✖を絶対配置するため */
+  display: inline-block;
+  background: #fffbe6;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 本体閉じるボタン */
+#closeCalculatorBtn {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 50%;
+  border: none;
+  background: #f44336;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+#closeCalculatorBtn:active { transform: scale(0.9); }
+
 #display {
   width: 90%;
   max-width: 300px;
@@ -23,6 +55,7 @@ body {
   border: 1px solid #ccc;
   background: #fff;
 }
+
 .btn {
   width: 70px;
   height: 70px;
@@ -36,7 +69,7 @@ body {
 }
 .btn:hover { background: #d4d4d4; }
 
-/* 履歴ボタン 横書き固定、大きめ */
+/* 履歴ボタン */
 #historyBtn {
   margin-top: 15px;
   width: 150px;
@@ -66,7 +99,7 @@ body {
   align-items: center;
 }
 #modalContent {
-  position: relative; /* 必須 */
+  position: relative;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -78,29 +111,7 @@ body {
   font-size: 18px;
 }
 
-/* モーダル右上✖ボタン */
-.modalCloseX {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #f44336;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-  z-index: 10;
-}
-.modalCloseX:active { transform: scale(0.9); }
-
-/* 履歴アイテム 横書き、大きめ */
+/* 履歴アイテム */
 .historyItem {
   display: flex;
   justify-content: space-between;
@@ -113,6 +124,7 @@ body {
   text-overflow: ellipsis;
 }
 .historyItem:hover { background: #e0e0e0; }
+
 .closeBtn {
   margin-top: 10px;
   background: #f44336;
@@ -128,42 +140,47 @@ body {
 <body>
 
 <h2>スマホ用横書き履歴電卓</h2>
-<input type="text" id="display" readonly>
 
-<div>
-  <button class="btn" onclick="press('7')">7</button>
-  <button class="btn" onclick="press('8')">8</button>
-  <button class="btn" onclick="press('9')">9</button>
-  <button class="btn" onclick="press('/')">÷</button>
-</div>
-<div>
-  <button class="btn" onclick="press('4')">4</button>
-  <button class="btn" onclick="press('5')">5</button>
-  <button class="btn" onclick="press('6')">6</button>
-  <button class="btn" onclick="press('*')">×</button>
-</div>
-<div>
-  <button class="btn" onclick="press('1')">1</button>
-  <button class="btn" onclick="press('2')">2</button>
-  <button class="btn" onclick="press('3')">3</button>
-  <button class="btn" onclick="press('-')">−</button>
-</div>
-<div>
-  <button class="btn" onclick="press('0')">0</button>
-  <button class="btn" onclick="press('.')">.</button>
-  <button class="btn" onclick="calculate()">=</button>
-  <button class="btn" onclick="press('+')">+</button>
-</div>
-<div>
-  <button class="btn" onclick="clearDisplay()">C</button>
+<!-- 電卓本体 -->
+<div id="calculator">
+  <button id="closeCalculatorBtn" onclick="closeCalculator()">✖</button>
+
+  <input type="text" id="display" readonly>
+
+  <div>
+    <button class="btn" onclick="press('7')">7</button>
+    <button class="btn" onclick="press('8')">8</button>
+    <button class="btn" onclick="press('9')">9</button>
+    <button class="btn" onclick="press('/')">÷</button>
+  </div>
+  <div>
+    <button class="btn" onclick="press('4')">4</button>
+    <button class="btn" onclick="press('5')">5</button>
+    <button class="btn" onclick="press('6')">6</button>
+    <button class="btn" onclick="press('*')">×</button>
+  </div>
+  <div>
+    <button class="btn" onclick="press('1')">1</button>
+    <button class="btn" onclick="press('2')">2</button>
+    <button class="btn" onclick="press('3')">3</button>
+    <button class="btn" onclick="press('-')">−</button>
+  </div>
+  <div>
+    <button class="btn" onclick="press('0')">0</button>
+    <button class="btn" onclick="press('.')">.</button>
+    <button class="btn" onclick="calculate()">=</button>
+    <button class="btn" onclick="press('+')">+</button>
+  </div>
+  <div>
+    <button class="btn" onclick="clearDisplay()">C</button>
+  </div>
+
+  <button id="historyBtn" class="btn" onclick="openModal()">履歴</button>
 </div>
 
-<button id="historyBtn" class="btn" onclick="openModal()">履歴</button>
-
-<!-- モーダル -->
+<!-- 履歴モーダル -->
 <div id="modal">
   <div id="modalContent">
-    <button class="modalCloseX" onclick="closeModal()">✖</button>
     <h3>履歴</h3>
     <div id="historyList"></div>
     <button class="closeBtn" onclick="closeModal()">閉じる</button>
@@ -178,7 +195,6 @@ function press(value) {
   expression += value;
   document.getElementById('display').value = expression;
 }
-
 function calculate() {
   try {
     const result = eval(expression);
@@ -190,13 +206,12 @@ function calculate() {
     expression = '';
   }
 }
-
 function clearDisplay() {
   expression = '';
   document.getElementById('display').value = '';
 }
 
-// 履歴管理（localStorage使用）
+// 履歴管理
 function addHistory(text) {
   const now = new Date();
   const weekdays = ['日','月','火','水','木','金','土'];
@@ -220,6 +235,11 @@ function openModal() {
 }
 function closeModal() {
   document.getElementById('modal').style.display = 'none';
+}
+
+// 本体閉じる
+function closeCalculator() {
+  document.getElementById('calculator').style.display = 'none';
 }
 
 // 履歴リスト更新
