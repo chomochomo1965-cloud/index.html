@@ -5,187 +5,135 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>スマホ用横書き履歴電卓</title>
 <style>
-body {
-  font-family: sans-serif;
-  text-align: center;
-  margin-top: 50px;
-  background: #f0f0f0;
-}
-
-/* タイトル＋電卓全体をまとめる */
-#calculatorWrapper {
-  display: inline-block;
-  position: relative;
-}
-
-/* 電卓本体 */
-#calculator {
-  position: relative;
-  display: inline-block;
-  background: #fffbe6;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  margin-top: 10px;
-}
-
-/* 本体閉じるボタン（完全終了用） */
-#closeCalculatorBtn {
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  width: 45px;
-  height: 45px;
-  font-size: 24px;
-  font-weight: bold;
-  border-radius: 50%;
-  border: none;
-  background: #f44336;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
-#closeCalculatorBtn:active { transform: scale(0.9); }
-
-#display {
-  width: 90%;
-  max-width: 300px;
-  height: 60px;
-  font-size: 30px;
-  text-align: right;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background: #fff;
-}
-
-.btn {
-  width: 70px;
-  height: 70px;
-  font-size: 28px;
-  margin: 5px;
-  cursor: pointer;
-  border-radius: 10px;
-  border: none;
-  background: #fff;
-  transition: 0.2s;
-}
-.btn:hover { background: #d4d4d4; }
-
-/* 履歴ボタン */
-#historyBtn {
-  margin-top: 15px;
-  width: 150px;
-  height: 50px;
-  font-size: 20px;
-  writing-mode: horizontal-tb;
-  text-align: center;
-  white-space: nowrap;
-  background: #4CAF50;
-  color: #fff;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-/* モーダル */
-#modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  justify-content: center;
-  align-items: center;
-}
-#modalContent {
-  position: relative;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 90%;
-  width: 300px;
-  max-height: 80%;
-  overflow-y: auto;
-  text-align: left;
-  font-size: 18px;
-}
-
-/* 履歴アイテム */
-.historyItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 10px;
-  border-bottom: 1px solid #ccc;
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.historyItem:hover { background: #e0e0e0; }
-
-.closeBtn {
-  margin-top: 10px;
-  background: #f44336;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 18px;
-}
+  body {
+    font-family: sans-serif;
+    text-align: center;
+    margin-top: 50px;
+    background: #f0f0f0;
+  }
+  #display {
+    width: 90%;
+    max-width: 300px;
+    height: 60px;
+    font-size: 30px;
+    text-align: right;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #fff;
+  }
+  .btn {
+    width: 70px;
+    height: 70px;
+    font-size: 28px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
+    background: #fff;
+    transition: 0.2s;
+  }
+  .btn:hover {
+    background: #d4d4d4;
+  }
+  /* 履歴ボタン 横書き固定、大きめ */
+  #historyBtn {
+    margin-top: 15px;
+    width: 150px;
+    height: 50px;
+    font-size: 20px;
+    writing-mode: horizontal-tb;
+    text-align: center;
+    white-space: nowrap;
+    background: #4CAF50;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  /* モーダル */
+  #modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+  }
+  #modalContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 90%;
+    width: 300px;
+    max-height: 80%;
+    overflow-y: auto;
+    text-align: left;
+    font-size: 18px;
+  }
+  /* 履歴アイテム 横書き、大きめ */
+  .historyItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .historyItem:hover {
+    background: #e0e0e0;
+  }
+  .closeBtn {
+    margin-top: 10px;
+    background: #f44336;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+  }
 </style>
 </head>
 <body>
-
-<!-- タイトル＋電卓本体まとめ -->
-<div id="calculatorWrapper">
-  <h2>スマホ用横書き履歴電卓</h2>
-  <div id="calculator">
-    <button id="closeCalculatorBtn" onclick="closeCalculator()">✖</button>
-    <input type="text" id="display" readonly>
-
-    <div>
-      <button class="btn" onclick="press('7')">7</button>
-      <button class="btn" onclick="press('8')">8</button>
-      <button class="btn" onclick="press('9')">9</button>
-      <button class="btn" onclick="press('/')">÷</button>
-    </div>
-    <div>
-      <button class="btn" onclick="press('4')">4</button>
-      <button class="btn" onclick="press('5')">5</button>
-      <button class="btn" onclick="press('6')">6</button>
-      <button class="btn" onclick="press('*')">×</button>
-    </div>
-    <div>
-      <button class="btn" onclick="press('1')">1</button>
-      <button class="btn" onclick="press('2')">2</button>
-      <button class="btn" onclick="press('3')">3</button>
-      <button class="btn" onclick="press('-')">−</button>
-    </div>
-    <div>
-      <button class="btn" onclick="press('0')">0</button>
-      <button class="btn" onclick="press('.')">.</button>
-      <button class="btn" onclick="calculate()">=</button>
-      <button class="btn" onclick="press('+')">+</button>
-    </div>
-    <div>
-      <button class="btn" onclick="clearDisplay()">C</button>
-    </div>
-
-    <button id="historyBtn" class="btn" onclick="openModal()">履歴</button>
-  </div>
+<h2>スマホ用横書き履歴電卓</h2>
+<input type="text" id="display" readonly>
+<div>
+  <button class="btn" onclick="press('7')">7</button>
+  <button class="btn" onclick="press('8')">8</button>
+  <button class="btn" onclick="press('9')">9</button>
+  <button class="btn" onclick="press('/')">÷</button>
 </div>
+<div>
+  <button class="btn" onclick="press('4')">4</button>
+  <button class="btn" onclick="press('5')">5</button>
+  <button class="btn" onclick="press('6')">6</button>
+  <button class="btn" onclick="press('*')">×</button>
+</div>
+<div>
+  <button class="btn" onclick="press('1')">1</button>
+  <button class="btn" onclick="press('2')">2</button>
+  <button class="btn" onclick="press('3')">3</button>
+  <button class="btn" onclick="press('-')">−</button>
+</div>
+<div>
+  <button class="btn" onclick="press('0')">0</button>
+  <button class="btn" onclick="press('.')">.</button>
+  <button class="btn" onclick="calculate()">=</button>
+  <button class="btn" onclick="press('+')">+</button>
+</div>
+<div>
+  <button class="btn" onclick="clearDisplay()">C</button>
+</div>
+<button id="historyBtn" class="btn" onclick="openModal()">履歴</button>
 
-<!-- 履歴モーダル -->
+<!-- モーダル -->
 <div id="modal">
   <div id="modalContent">
     <h3>履歴</h3>
@@ -202,6 +150,7 @@ function press(value) {
   expression += value;
   document.getElementById('display').value = expression;
 }
+
 function calculate() {
   try {
     const result = eval(expression);
@@ -213,12 +162,13 @@ function calculate() {
     expression = '';
   }
 }
+
 function clearDisplay() {
   expression = '';
   document.getElementById('display').value = '';
 }
 
-// 履歴管理
+// 履歴管理（localStorage使用）
 function addHistory(text) {
   const now = new Date();
   const weekdays = ['日','月','火','水','木','金','土'];
@@ -228,9 +178,8 @@ function addHistory(text) {
   const w = weekdays[now.getDay()];
   const dateStr = `${y}/${m}/${d} (${w})`;
   const entry = `[${dateStr}] ${text}`;
-
   let history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
-  history.unshift(entry);
+  history.unshift(entry); // 最新を上に
   localStorage.setItem('calcHistory', JSON.stringify(history));
   updateHistoryList();
 }
@@ -240,12 +189,44 @@ function openModal() {
   document.getElementById('modal').style.display = 'flex';
   updateHistoryList();
 }
+
 function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
 
-// キーボードイベント
-function keyboardHandler(e) {
+// 履歴リスト更新
+function updateHistoryList() {
+  const historyList = document.getElementById('historyList');
+  historyList.innerHTML = '';
+  const history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
+  history.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'historyItem';
+    div.textContent = item;
+    // クリックで再利用
+    div.addEventListener('click', () => {
+      const formula = item.split(' = ')[0].split('] ')[1];
+      expression = formula;
+      document.getElementById('display').value = expression;
+      closeModal();
+    });
+    // 削除ボタン
+    const delBtn = document.createElement('button');
+    delBtn.textContent = '×';
+    delBtn.style.marginLeft = '5px';
+    delBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      history.splice(index, 1);
+      localStorage.setItem('calcHistory', JSON.stringify(history));
+      updateHistoryList();
+    });
+    div.appendChild(delBtn);
+    historyList.appendChild(div);
+  });
+}
+
+// キーボード対応
+document.addEventListener('keydown', (e) => {
   if ((e.key >= '0' && e.key <= '9') || e.key === '.' || ['+', '-', '*', '/'].includes(e.key)) {
     press(e.key);
   } else if (e.key === 'Enter') {
@@ -256,61 +237,7 @@ function keyboardHandler(e) {
   } else if (e.key.toLowerCase() === 'c') {
     clearDisplay();
   }
-}
-document.addEventListener('keydown', keyboardHandler);
-
-// 完全終了（画面全体を削除）
-function closeCalculator() {
-  // 電卓＋タイトルを削除
-  const wrapper = document.getElementById('calculatorWrapper');
-  if(wrapper) wrapper.remove();
-
-  // モーダルも削除
-  const modal = document.getElementById('modal');
-  if(modal) modal.remove();
-
-  // 入力・キーボードリセット
-  expression = '';
-  document.removeEventListener('keydown', keyboardHandler);
-
-  // 背景も消す
-  document.body.style.background = '';
-  document.body.innerHTML = '';
-}
-
-// 履歴リスト更新
-function updateHistoryList() {
-  const historyList = document.getElementById('historyList');
-  historyList.innerHTML = '';
-  const history = JSON.parse(localStorage.getItem('calcHistory') || '[]');
-
-  history.forEach((item, index) => {
-    const div = document.createElement('div');
-    div.className = 'historyItem';
-    div.textContent = item;
-
-    div.addEventListener('click', () => {
-      const formula = item.split(' = ')[0].split('] ')[1];
-      expression = formula;
-      document.getElementById('display').value = expression;
-      closeModal();
-    });
-
-    const delBtn = document.createElement('button');
-    delBtn.textContent = '×';
-    delBtn.style.marginLeft = '5px';
-    delBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      history.splice(index, 1);
-      localStorage.setItem('calcHistory', JSON.stringify(history));
-      updateHistoryList();
-    });
-
-    div.appendChild(delBtn);
-    historyList.appendChild(div);
-  });
-}
+});
 </script>
-
 </body>
 </html>
