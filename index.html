@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>スマホ用横書き履歴電卓</title>
+<title>スマホ用横書き履歴電卓（完全終了版）</title>
 <style>
 body {
   font-family: sans-serif;
@@ -14,7 +14,7 @@ body {
 
 /* 電卓本体 */
 #calculator {
-  position: relative; /* 本体内で✖を絶対配置するため */
+  position: relative;
   display: inline-block;
   background: #fffbe6;
   padding: 20px;
@@ -22,7 +22,7 @@ body {
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* 本体閉じるボタン */
+/* 本体閉じるボタン（完全終了用） */
 #closeCalculatorBtn {
   position: absolute;
   top: -15px;
@@ -139,7 +139,7 @@ body {
 </head>
 <body>
 
-<h2>スマホ用横書き履歴電卓</h2>
+<h2>スマホ用横書き履歴電卓（完全終了版）</h2>
 
 <!-- 電卓本体 -->
 <div id="calculator">
@@ -237,9 +237,30 @@ function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
 
-// 本体閉じる
+// キーボードイベント
+function keyboardHandler(e) {
+  if ((e.key >= '0' && e.key <= '9') || e.key === '.' || ['+', '-', '*', '/'].includes(e.key)) {
+    press(e.key);
+  } else if (e.key === 'Enter') {
+    calculate();
+  } else if (e.key === 'Backspace') {
+    expression = expression.slice(0, -1);
+    document.getElementById('display').value = expression;
+  } else if (e.key.toLowerCase() === 'c') {
+    clearDisplay();
+  }
+}
+
+// 初期化時にキーボードイベント登録
+document.addEventListener('keydown', keyboardHandler);
+
+// 本体閉じる（完全終了）
 function closeCalculator() {
   document.getElementById('calculator').style.display = 'none';
+  expression = '';
+  document.getElementById('display').value = '';
+  closeModal();
+  document.removeEventListener('keydown', keyboardHandler);
 }
 
 // 履歴リスト更新
@@ -274,20 +295,6 @@ function updateHistoryList() {
     historyList.appendChild(div);
   });
 }
-
-// キーボード対応
-document.addEventListener('keydown', (e) => {
-  if ((e.key >= '0' && e.key <= '9') || e.key === '.' || ['+', '-', '*', '/'].includes(e.key)) {
-    press(e.key);
-  } else if (e.key === 'Enter') {
-    calculate();
-  } else if (e.key === 'Backspace') {
-    expression = expression.slice(0, -1);
-    document.getElementById('display').value = expression;
-  } else if (e.key.toLowerCase() === 'c') {
-    clearDisplay();
-  }
-});
 </script>
 
 </body>
